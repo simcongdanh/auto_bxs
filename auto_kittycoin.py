@@ -14,6 +14,9 @@ from time import sleep
 import os, sys, random, threading, threaded, pyautogui, requests, PIL
 from anycaptcha import RecaptchaV2Task, AnycaptchaClient, RecaptchaV2TaskProxyless
 from selenium.webdriver.common.keys import Keys
+import imaplib
+import email
+from email.mime.multipart import MIMEMultipart
 
 
 class Ui_Dialog(object):
@@ -208,40 +211,54 @@ class Ui_Dialog(object):
                 number_link += 1
             url_bxs = links[int(number_link)]
             #url_dxdy = links[int(number_link)]
+            #print(name_pf)
+            name =  f"{random_ho} + {random_ten}"
             chrome_options = webdriver.ChromeOptions()
+            #chrome_options.add_argument(f"user-data-dir=.\\data\\profile\\{name_pf}")
+            #chrome_options.add_argument(r"--load-extension=:\Users\CongDanh\Desktop\AnyCaptchaCallbackHooker_Unpacked\AnyCaptchaCallbackHooker_Unpacked")
             chrome_options.add_argument("--incognito")
             browser = webdriver.Chrome(chrome_options=chrome_options)
-            if len(address[i]) >= 42:
+            if len(bsc_ad[i]) >= 42:
                 #dxdy
                 self.lb_link.setText(f"Link: {url_bxs}")
                 self.lb_numlink.setText(f"Number of link: {num_ref_link}")
                 browser.get(url_bxs)
                 browser.implicitly_wait(10)
                 try:
-                    browser.find_element_by_name("bscAddress").send_keys(bsc_ad[i])
+                    browser.find_element_by_id("name").send_keys(name)
                 except:
-                    browser.find_elements_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[1]/div/div/input')[0].send_keys(bsc_ad[i])
+                    browser.find_elements_by_name("name").send_keys(name)
+                sleep(2)
+                # try:
+                #     browser.find_element_by_name("bscAddress").send_keys(bsc_ad[i])
+                # except:
+                #     browser.find_elements_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[1]/div/div/input')[0].send_keys(bsc_ad[i])
+                # sleep(3)
+                try:
+                    browser.find_element_by_name('email').send_keys('amestjbalsermdl@outlook.com')
+                except:
+                    browser.find_elements_by_xpath('//*[@id="email"]')[0].send_keys('amestjbalsermdl@outlook.com')
                 sleep(3)
                 try:
-                    browser.find_element_by_name('email').send_keys(randomemail_1)
+                    browser.find_element_by_id("password").send_keys("Abc123456")
                 except:
-                    browser.find_elements_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[2]/div/div/input')[0].send_keys(randomemail_1)
-                sleep(3)
+                    browser.find_elements_by_name('password').send_keys("Abc123456")
                 #pyautogui.click(pyautogui.locateCenterOnScreen('Screenshot_4.png'))
-                try:
-
-                    # browser.switch_to.frame(browser.find_element_by_xpath("//iframe[contains(@title,'reCAPTCHA') and contains(@role,'presentation')]"))
-                    browser.switch_to.frame(browser.find_element_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[3]/div/div/iframe'))
-                except:
-                    browser.switch_to.frame(browser.find_element_by_xpath('#app > div.airdrop-page > div.airdrop-middle > div.airdrop-blind-box > form > div.grecaptcha-warpper > div > div > iframe'))
-                sleep(1)
+                # try:
+                #     # browser.switch_to.frame(browser.find_element_by_xpath("//iframe[contains(@title,'reCAPTCHA') and contains(@role,'presentation')]"))
+                #     browser.switch_to.frame(browser.find_element_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[3]/div/div/iframe'))
+                # except:
+                #     browser.switch_to.frame(browser.find_element_by_xpath('#app > div.airdrop-page > div.airdrop-middle > div.airdrop-blind-box > form > div.grecaptcha-warpper > div > div > iframe'))
+                # sleep(1)
                 # try:
                 #     browser.find_element_by_id("recaptcha-anchor").click()
                 # except:
                 #     browser.find_element_by_xpath('//*[@id="recaptcha-anchor"]').click()
                 # browser.implicitly_wait(5)
-                site_key = "6Lc9AhQdAAAAAB2gLv-YDmlu8bS9srUHvTlgvn0P"
+                #site_key = "6Lc9AhQdAAAAAB2gLv-YDmlu8bS9srUHvTlgvn0P"
                 api_key = '73f6fe6d2e444b2e93c1803b94b65aec'
+                site_key = "6Ld7zMEcAAAAAGz7McilorojtTcttVALKnFOp_Fk"
+
                 client = AnycaptchaClient(api_key)
                 is_invisible = True
                 task = RecaptchaV2TaskProxyless(website_url=url_bxs, website_key=site_key, is_invisible=is_invisible)
@@ -257,14 +274,34 @@ class Ui_Dialog(object):
                 # browser.switch_to.default_content()
 
                 # captchaChkbox = browser.getElementById("g-recaptcha-response")
-                browser.execute_script('document.getElementById("g-recaptcha-response").innerHTML = "%s"' % result)
+                browser.execute_script('document.getElementById("g-recaptcha-response").innerHTML="%s"' % result)
+                #browser.execute_script("document.getElementById('anycaptchaSolveButton').onclick('%s');" % result)
+                #browser.execute_script(f"textarea = document.getElementsByName('g-recaptcha-response')[0]; var button = document.createElement('button'); button.type = 'submit'; button.innerHTML = '{result}'; button.setAttribute('id', 'jsk'); textarea.parentNode.insertBefore(button, textarea.nextSibling)")
                 try:
-                    browser.find_element_by_xpath('//*[@id="app"]/div[3]/div[2]/div[1]/form/div[4]/button').click()
+                    browser.find_element_by_link_text("Sign up").click()
                 except:
-                    browser.find_element_by_css_selector('#app > div.airdrop-page > div.airdrop-middle > div.airdrop-blind-box > form > div.button-box-bg > button').click()
+                    browser.find_element_by_xpath("/html/body/div[4]/div/div/div/div/form/div/div[6]/button").click()
                 self.lb_success.setText(f"Successfully: {num_ref}")
                 sleep(8)
 
+                mail = imaplib.IMAP4_SSL('outlook.office365.com')
+                mail.login('amestjbalsermdl@outlook.com', '9S2aTJ87')
+                mail.list()
+                mail.select('inbox')
+
+                for i in range(1, 5):
+                    typ, msg_data = mail.fetch(str(i), '(RFC822)')
+                    for response_part in msg_data:
+                        if isinstance(response_part, tuple):
+                            # print(response_part[1])
+                            msg = email.message_from_string(str(response_part[1]))
+                            # print(msg)
+                            # for header in [ 'subject', 'to', 'from' ]:
+                            #     print('%-8s: %s' % (header.upper(), msg[header]))
+                            print(msg['subject'])
+
+                mail.close()
+                mail.logout()
             browser.close()
     #run thread ref
     def thread_run(self):
